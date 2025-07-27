@@ -1,0 +1,22 @@
+[gd_scene load_steps=4 format=3 uid="uid://6prt7eikeqwb"]
+
+[ext_resource type="Script" uid="uid://bgtd0nfnkr6mc" path="res://scripts/long.gd" id="1_pguee"]
+[ext_resource type="Texture2D" uid="uid://djganh162hkt2" path="res://assets/longer.png" id="1_yq8ty"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_mcm07"]
+radius = 14.0
+
+[node name="long" type="Area2D"]
+collision_layer = 2
+script = ExtResource("1_pguee")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+scale = Vector2(0.75, 0.75)
+shape = SubResource("CircleShape2D_mcm07")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture_filter = 1
+scale = Vector2(0.75, 0.75)
+texture = ExtResource("1_yq8ty")
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]

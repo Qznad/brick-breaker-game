@@ -1,0 +1,14 @@
+Area2D
+CharacterBody2D
+Sprite2D
+CollisionShape2D
+ColorRect
+AnimationPlayer
+Label
+Button
+VBoxContainer
+Panel
+TileMapLayer
+TileMap
+StaticBody2D
+Node

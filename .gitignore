@@ -1,0 +1,8 @@
+# Godot-specific ignore rules
+.import/
+export.cfg
+export_presets.cfg
+
+# OS files
+.DS_Store
+Thumbs.db
