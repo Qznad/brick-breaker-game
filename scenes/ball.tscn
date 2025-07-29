@@ -17,3 +17,5 @@ offset_bottom = 4.0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("RectangleShape2D_cxlvu")
+
+[node name="bouncesound" type="AudioStreamPlayer2D" parent="."]

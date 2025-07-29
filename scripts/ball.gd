@@ -1,5 +1,6 @@
 extends CharacterBody2D
 
+# Adjust the speed and acceleration at your need
 @export var start_speed: int = 150
 @export var accel: int = 5
 @export var max_x_vector: float = 1.0
@@ -11,6 +12,8 @@ var speed: int
 var direction: Vector2
 var win_size: Vector2
 
+
+# Powerup drop chances 3% 1% 6% 
 var powerup_weights := [
 	[preload("res://scenes/double.tscn"),3],
 	[preload("res://scenes/hot.tscn"),1],
@@ -51,19 +54,25 @@ func _physics_process(delta: float) -> void:
 	var collision = move_and_collide(direction * speed * delta)
 	if collision:
 		var collider = collision.get_collider()
+		print(collider.name)
 		if collider.is_in_group("player"):
+			
+			_play_bounce("res://assets/sounds/bump.ogg")
 			speed += accel
 			direction = new_direction(collider)
-		elif collider.name.begins_with("brick"):
+		elif collider.name.begins_with("@") or collider.name.begins_with("brick") :
+			_play_bounce("res://assets/sounds/bump.ogg")
 			# Remove brick node and bounce
 			collider.queue_free()
 			if bouncing :
-				hot_bricks_count = 0
+				
 				direction = direction.bounce(collision.get_normal())
 			else :
-				#HOT POWER IS ON (can destroy 10 blocks without bouncing !
+				#HOT POWER IS ON (can destroy 25 blocks without bouncing !
+				_play_bounce("res://assets/sounds/block_broken.wav",false)
 				hot_bricks_count +=1
-				if hot_bricks_count == 50 : 
+				if hot_bricks_count == 25 :
+					hot_bricks_count = 0
 					bouncing = true
 					if self.has_node("ColorRect"):
 						self.get_node("ColorRect").color = Color.WHITE
@@ -77,6 +86,7 @@ func _physics_process(delta: float) -> void:
 					get_tree().current_scene.add_child(powerup)
 
 		else:
+			_play_bounce("res://assets/sounds/bump_2.ogg")
 			# Bounce for all other collisions
 			direction = direction.bounce(collision.get_normal())
 
@@ -103,3 +113,13 @@ func new_direction(collider) -> Vector2:
 	new_dir.x = (dist / (paddle_width / 2.0)) * max_x_vector
 	new_dir = new_dir.normalized()
 	return new_dir
+func _play_bounce(path: String , stop = true ):
+	var stream = load(path)
+	if stream is AudioStream:
+		if $bouncesound.playing and stop:
+			$bouncesound.stop()
+		$bouncesound.stream = stream
+		$bouncesound.pitch_scale = randf_range(0.9, 1.1)
+		$bouncesound.play()
+	else:
+		push_error("Invalid audio stream at: " + path)

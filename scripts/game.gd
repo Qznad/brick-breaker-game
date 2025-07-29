@@ -9,26 +9,39 @@ func _ready() -> void:
 	await get_tree().create_timer(0.5).timeout
 	game_started = true
 
+
+
 func _on_area_2d_body_entered(body: Node2D) -> void:
 	if not game_started:
 		return
 	if body.is_in_group("balls"):
 		body.remove_from_group("balls")  # Ensure it's no longer counted
-		body.queue_free()  # Remove the ball that *
-		print("ball removed !")
+		body.queue_free()  # Remove the ball that falls
 
 		# Delay check to let the scene tree catch up (still good practice)
 		await get_tree().process_frame
 
 		var balls = get_tree().get_nodes_in_group("balls")
 		if balls.size() == 0:
-			$LossingMenu.visible = true
-			$LossingMenu/AnimationPlayer.play("pausing")
+			$Menu._cleaning_up()
+			$Menu/main/title.text = "GAME OVER"
+			$Menu/main/score.text = "0 pts"
+			$Menu.visible = true
+			$Menu/AnimationPlayer.play("pausing")
 			get_tree().paused = true
+func _winner() -> void:
+	$Menu._cleaning_up()
+	$Menu/main/title.text = "WINNER"
+	$Menu/main/score.text = "<3 pts"
+	$Menu.visible = true
+	$Menu/AnimationPlayer.play("pausing")
+	get_tree().paused = true
+
 
 
 @export var ball_scene: PackedScene
 
+# Max balls that can exist ( not limiting the balls can lead to overflow breaking the game !
 const MAX_BALLS = 248
 
 func double_balls():
