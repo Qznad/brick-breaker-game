@@ -17,7 +17,7 @@ A simple brick-breaker game made using Godot Engine 4.x.
 3. Run the game from the main scene
 
 ## To Do List
-- Add a winning menu
+✅ Add a winning menu
 - Add more bricks (different colors, functionality)
 - Make more maps  (levels) 
 - Improve the main menu :)
